@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>洋美清潔 五星好評填寫</title>
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{max-width:560px;margin:0 auto;padding:1.5rem 1rem 3rem;font-family:var(--font-sans)}
+h1{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.6}
+.section{margin-bottom:1.25rem}
+label{display:block;font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px}
+input[type=text],select,textarea{width:100%;font-size:14px;padding:10px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);outline:none;font-family:var(--font-sans)}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--color-border-primary);box-shadow:0 0 0 2px rgba(0,0,0,0.06)}
+.reviews{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.review-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;background:var(--color-background-primary);-webkit-tap-highlight-color:rgba(0,0,0,0.05);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.review-card:hover{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.review-card.selected{border:1.5px solid #378ADD;background:var(--color-background-info)}
+.review-card .rtxt{font-size:13px;color:var(--color-text-primary);line-height:1.7}
+.review-card.selected .rtxt{color:var(--color-text-info)}
+textarea{resize:none;min-height:140px;line-height:1.7;font-size:14px}
+.star{color:#f59e0b;font-size:18px;letter-spacing:2px;margin-bottom:8px}
+.btn-copy{width:100%;padding:12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-sans);margin-bottom:8px}
+.btn-copy:hover{background:var(--color-background-secondary)}
+.btn-go{width:100%;padding:13px;border-radius:var(--border-radius-md);border:none;background:#2563eb;color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+.btn-go:hover{background:#1d4ed8}
+.copied{font-size:12px;color:var(--color-text-success);text-align:center;display:none;margin-top:4px}
+.hint{font-size:12px;color:var(--color-text-secondary);margin-top:6px;line-height:1.6}
+.step-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<div class="wrap">
+  <h1>洋美清潔 &#8231; 五星好評填寫</h1>
+  <p class="sub">填寫約需 1 分鐘，完成後一鍵複製貼上 Google 即可</p>
+
+  <div class="section">
+    <div class="step-label">步驟 1 &#8231; 基本資料</div>
+    <label>您的暱稱</label>
+    <input type="text" id="nickname" placeholder="例：王小姐、台北陳先生" oninput="rebuild()">
+  </div>
+
+  <div class="section">
+    <label>服務區域</label>
+    <select id="region" onchange="rebuild()">
+      <option value="">請選擇區域</option>
+      <optgroup label="台北市">
+        <option>台北市信義區</option><option>台北市大安區</option><option>台北市中山區</option>
+        <option>台北市松山區</option><option>台北市內湖區</option><option>台北市南港區</option>
+        <option>台北市士林區</option><option>台北市北投區</option><option>台北市中正區</option>
+        <option>台北市萬華區</option><option>台北市文山區</option><option>台北市大同區</option>
+      </optgroup>
+      <optgroup label="新北市">
+        <option>新北市板橋區</option><option>新北市新莊區</option><option>新北市三重區</option>
+        <option>新北市中和區</option><option>新北市永和區</option><option>新北市新店區</option>
+        <option>新北市土城區</option><option>新北市汐止區</option><option>新北市蘆洲區</option>
+        <option>新北市樹林區</option><option>新北市鶯歌區</option><option>新北市淡水區</option>
+        <option>新北市三峽區</option><option>新北市林口區</option><option>新北市泰山區</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <div class="section">
+    <label>服務人員姓名 <span style="font-weight:400;color:var(--color-text-secondary)">（選填）</span></label>
+    <input type="text" id="staff" placeholder="例：劉師傅、陳督導、志宇師傅" oninput="rebuild()">
+  </div>
+
+  <div class="section">
+    <div class="step-label">步驟 2 &#8231; 施作項目</div>
+    <select id="service" onchange="loadReviews()">
+      <option value="">請選擇項目</option>
+      <option value="office">辦公室清潔</option>
+      <option value="community">社區清潔</option>
+      <option value="pest">消毒除蟲</option>
+      <option value="carpet">洗地毯</option>
+      <option value="wax">洗地打蠟</option>
+      <option value="crystal">晶化美容保養</option>
+    </select>
+  </div>
+
+  <div class="section" id="review-section" style="display:none">
+    <div class="step-label">步驟 3 &#8231; 選擇最符合的評價</div>
+    <div class="reviews" id="reviews"></div>
+  </div>
+
+  <div class="section" id="edit-section" style="display:none">
+    <div class="step-label">步驟 4 &#8231; 確認並修改您的評價</div>
+    <div class="star">★★★★★</div>
+    <textarea id="final" oninput="userEdited=true"></textarea>
+    <p class="hint">內容已自動帶入您的資訊，可直接修改成自己的話，文字越自然越好</p>
+  </div>
+
+  <div id="btn-section" style="display:none;margin-top:1.5rem">
+    <button class="btn-copy" onclick="copyText()">複製評價內容</button>
+    <button class="btn-go" onclick="goGoogle()">前往 Google 貼上評價</button>
+    <p class="copied" id="copied-msg">已複製！請點上方按鈕前往 Google 評價頁貼上</p>
+  </div>
+</div>
+
+<script>
+const DB = {
+  office:[
+    "第一次找洋美清潔，{staff}到場後態度非常親切，主動留意到很多平時容易忽略的角落，連桌腳、窗台都清得很仔細。整個作業流程很有效率，完全不影響我們正常上班。{region}的企業有清潔需求，值得考慮這個團隊。",
+    "我們在{region}的辦公室已經跟洋美配合很多年了，服務品質一直很穩定。{staff}把公司當自己家一樣打掃，細心又認真，遇到臨時狀況也會立刻處理。溝通順暢，是讓人很放心的長期合作夥伴。",
+    "請洋美來做辦公室清潔，{staff}的服務讓我印象很深刻，不用特別交代，每個角落都打掃得一塵不染。清完之後同事都說環境差很多，空間整個明亮起來。{region}這邊需要清潔服務的推薦試試看。",
+    "洋美清潔團隊真的很專業，{staff}從預約到施作整個流程很清楚，現場作業細心有條不紊，對每個清潔細節都嚴格把關。完工後整個{region}辦公室煥然一新，超乎預期，之後有需要一定繼續配合。",
+    "我們{region}的診所環境要求比較嚴格，請洋美來做清潔，{staff}服務態度優良，不需要特別叮嚀就把室內外打掃得乾乾淨淨，督導也會定期巡點確認品質，溝通很順暢，是值得信賴的清潔公司。"
+  ],
+  community:[
+    "我們{region}社區委託洋美做公區清潔之後，整棟大樓環境明顯改善很多。{staff}每次來都很認真，大廳、走廊、電梯各個角落都打理得很整潔，住戶反應都很正面，管委會非常滿意這次的選擇。",
+    "跟洋美配合社區清潔快一年了，服務品質很穩定。{staff}不只認真打掃，遇到住戶也都笑臉迎人，互動很自然親切。{region}的社區整體環境煥然一新，明亮很多，是很值得推薦的清潔團隊。",
+    "{region}社區的公區清潔交給洋美之後真的省心很多。{staff}工作態度認真負責，細節都照顧到，如果有請假也會提前協調好人力安排，讓管委會完全不用擔心，溝通順暢，長期合作非常愉快。",
+    "社區大廳、地下室、中庭這些公共區域的清潔全部交給洋美處理，{staff}帶領的團隊作業效率很高，細節都顧到。整個{region}社區今年變得非常明亮，住戶都說差很多，機動清潔真的是洋美的強項。",
+    "請洋美來做{region}社區的駐點清潔，{staff}每天固定打掃，從一樓大廳到各層走廊都很整潔。遇到住戶也都主動打招呼，讓大家感覺很貼心。這是能放心長期委託的優質清潔公司，推薦給其他社區。"
+  ],
+  pest:[
+    "家裡在{region}，發現有蟑螂出沒，找洋美來做消毒除蟲。{staff}到場後很有耐心說明用藥內容和注意事項，讓我們放心很多。施作效率也很好，不會影響太久。處理完一個多月了都沒有再看到，效果很好！",
+    "第一次請專業團隊來做消毒，洋美的{staff}服務非常專業，流程清楚，有問必答態度很好。家裡有小孩，他特別說明是專業環境用藥，也提醒了很多注意細節，讓人很安心。{region}有需要的強力推薦。",
+    "洋美的{staff}真的很專業也很細心，來{region}評估現場後，依照實際狀況調整防治方式，不是那種來做完就走的例行公事。還主動教了幾個日常預防的小技巧，整體合作下來讓人非常安心，真心推薦。",
+    "{region}公司外圍遇到鼠患，原本請洋美打掃，順便請他們的病媒防治團隊來處理。{staff}服務非常周到細心，找到平常根本不會注意到的問題點，施作完之後問題明顯改善。真的是很棒的一間公司！",
+    "家裡蟲害問題困擾很久，找洋美的{staff}來{region}處理，他不只完成施作，還教我們怎麼預防、擺放誘捕器的技巧，感覺非常用心，不是應付了事。做事效率快又認真，問題解決之後整個人輕鬆很多，真心推薦。"
+  ],
+  carpet:[
+    "請洋美來收{region}的地毯回去清洗，{staff}服務態度很好，預約流程快速清楚。地毯送回來之後洗得非常乾淨，原本黑黑的地方都洗掉了，也完全沒有異味，整個煥然一新，推薦有洗地毯需求的朋友。",
+    "地毯上有幾個較深的污點，送去洋美清洗前本來不抱太大希望。{staff}過程中主動來電說明地毯狀況，讓我很安心。拿回來之後污點淡化很多，整體乾淨程度超出預期，{region}有需要洗地毯的可以試試。",
+    "工作室的長毛地毯自己沒辦法清洗，請洋美的{staff}來收件。從預約收件到洗完送回，流程快速清楚，師傅也都很親切。地毯洗完整體非常乾淨，毯毛也整理好了，空間感覺清爽很多，非常滿意這次的服務。",
+    "第一次找洋美洗地毯，{staff}事前有說明陳年污漬有些可能洗不起來，這種誠實的溝通讓我很信任他們。過程中也有打來更新進度，最後洗出來的成果比預期還好。{region}的朋友有地毯清洗需求值得推薦。",
+    "送去洋美清洗的地毯已經用很多年了，本來擔心洗完會變形或縮水，結果{staff}處理得非常好，洗得很乾淨，質地也完全沒有受損。整個{region}附近找洗地毯，洋美的品質和服務態度都讓人放心，推薦！"
+  ],
+  wax:[
+    "每年都找洋美來{region}做地板打蠟，{staff}每次施作都很細心，從清潔吸地、清洗、吸乾到上蠟，每一步都認真到位，角落也都會注意到。完工後地板亮麗如新，這種穩定的品質真的值得五星推薦。",
+    "今年第一次請洋美做洗地打蠟，{staff}到場後先評估地板狀況再施作，整個過程很有條理。清完之後地板光可鑑人，整個{region}辦公室空間明亮了很多，同事都說煥然一新。之後還會繼續找洋美配合。",
+    "{region}社區大廳和地下室的地板請洋美做拋洗打蠟，{staff}帶領的施工團隊效率很高，態度也很好。完工後整個公區亮度大提升，住戶反應都很正面。機動清潔的品質非常穩定，值得信賴的清潔公司。",
+    "洋美的地板打蠟服務品質很穩定，{staff}作業非常認真，細節都顧到，不會馬虎帶過。完工後光澤效果很漂亮，反光均勻，完全看不出來原本有污漬的地方。{region}有地板清潔需求的企業推薦合作看看。",
+    "請洋美的{staff}來做辦公室洗地打蠟，施作前先清楚說明流程，讓我們知道要注意什麼。作業過程不影響辦公，效率很高。地板完工後整個空間質感提升很多，非常物超所值，{region}的企業可以參考。"
+  ],
+  crystal:[
+    "請洋美到{region}做大理石晶化美容保養，{staff}到場後先說明施作流程，整個過程很專業細心。完工後大理石地面光澤度明顯提升，反射效果非常漂亮，整個空間的質感瞬間不同，非常值得這次的投資。",
+    "大理石地板霧霧的，找洋美的{staff}來評估，他依照磨損程度選擇適合的施作工序，不是一概而論。過程中很注重細節，完成後地板恢復亮麗光澤，{region}的朋友有大理石保養需求的話大推洋美！",
+    "{region}辦公室入口的大理石請洋美的{staff}做晶化拋光，效果超出預期。原本有些霧面和細微刮痕的地方都改善很多，地面重現近乎鏡面的光澤，整個門面質感直接升級，非常推薦這項專業服務。",
+    "社區大廳大理石地板一直想恢復當初的光澤，今年找洋美做晶化美容保養，{staff}施作非常專業，有耐心地說明每個步驟。完工後地板晶亮如新，住戶都說差很多。{region}的管委會值得考慮這個服務。",
+    "大理石保養很吃技術，洋美的{staff}讓我很放心，說明清楚、施作細心，從研磨到晶化每個步驟都很到位。{region}的地板完工後光澤漂亮，整體空間質感大提升。服務態度也很好，強力推薦！"
+  ]
+};
+
+let selectedIdx = -1;
+let userEdited = false;
+
+function getFields(){
+  return {
+    nickname: document.getElementById('nickname').value.trim(),
+    region: document.getElementById('region').value,
+    staff: document.getElementById('staff').value.trim(),
+    service: document.getElementById('service').value
+  };
+}
+
+function fillTemplate(tpl, f){
+  let t = tpl;
+  t = t.replace(/\{region\}/g, f.region || '我們所在區域');
+  if(f.staff){
+    t = t.replace(/\{staff\}/g, f.staff);
+  } else {
+    t = t.replace(/，\{staff\}到場後/g,'，師傅到場後')
+         .replace(/，\{staff\}帶領/g,'，師傅帶領')
+         .replace(/，\{staff\}每次來/g,'，清潔人員每次來')
+         .replace(/，\{staff\}作業/g,'，師傅作業')
+         .replace(/，\{staff\}施作/g,'，師傅施作')
+         .replace(/，\{staff\}過程中/g,'，師傅過程中')
+         .replace(/，\{staff\}依照/g,'，師傅依照')
+         .replace(/，\{staff\}事前/g,'，師傅事前')
+         .replace(/洋美的\{staff\}/g,'洋美師傅')
+         .replace(/洋美的\{staff\}/g,'洋美師傅')
+         .replace(/\{staff\}/g,'師傅');
+  }
+  return t;
+}
+
+function loadReviews(){
+  selectedIdx = -1;
+  userEdited = false;
+  const f = getFields();
+  const svc = f.service;
+  const rs = document.getElementById('review-section');
+  const es = document.getElementById('edit-section');
+  const bs = document.getElementById('btn-section');
+  if(!svc){ rs.style.display='none'; es.style.display='none'; bs.style.display='none'; return; }
+  rs.style.display='block';
+  es.style.display='none';
+  bs.style.display='none';
+  const reviews = DB[svc];
+  const div = document.getElementById('reviews');
+  div.innerHTML = reviews.map((r,i)=>`
+    <div class="review-card" id="rc${i}" data-idx="${i}">
+      <div class="rtxt">${fillTemplate(r,f)}</div>
+    </div>
+  `).join('');
+  div.querySelectorAll('.review-card').forEach(card=>{
+    card.addEventListener('touchend', function(e){ e.preventDefault(); selectReview(parseInt(this.dataset.idx)); });
+    card.addEventListener('click', function(){ selectReview(parseInt(this.dataset.idx)); });
+  });
+}
+
+function selectReview(i){
+  selectedIdx = i;
+  userEdited = false;
+  document.querySelectorAll('.review-card').forEach((c,idx)=>{
+    c.classList.toggle('selected', idx===i);
+  });
+  rebuild();
+  document.getElementById('edit-section').style.display='block';
+  document.getElementById('btn-section').style.display='block';
+  setTimeout(()=>{
+    document.getElementById('edit-section').scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+function rebuild(){
+  if(selectedIdx < 0) return;
+  if(userEdited) return;
+  const f = getFields();
+  const svc = f.service;
+  if(!svc) return;
+  let txt = fillTemplate(DB[svc][selectedIdx], f);
+  if(f.nickname) txt = txt + '\n\n（' + f.nickname + '）';
+  document.getElementById('final').value = txt;
+  const div = document.getElementById('reviews');
+  const cards = div.querySelectorAll('.review-card');
+  DB[svc].forEach((r,idx)=>{
+    if(cards[idx]) cards[idx].querySelector('.rtxt').textContent = fillTemplate(r,f);
+  });
+}
+
+function copyText(){
+  const txt = document.getElementById('final').value;
+  if(!txt) return;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const m = document.getElementById('copied-msg');
+    m.style.display='block';
+    setTimeout(()=>m.style.display='none', 3500);
+  }).catch(()=>{
+    document.getElementById('final').select();
+    document.execCommand('copy');
+    const m = document.getElementById('copied-msg');
+    m.style.display='block';
+    setTimeout(()=>m.style.display='none', 3500);
+  });
+}
+
+function goGoogle(){
+  copyText();
+  window.open('https://g.page/r/CQn2Irpra0P_EAE/review','_blank');
+}
+</script>
+</body></html>
